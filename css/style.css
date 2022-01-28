@@ -1,0 +1,15 @@
+* {
+    background-color: #141414 !important;
+}
+
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
