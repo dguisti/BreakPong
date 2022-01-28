@@ -1,0 +1,10 @@
+{
+    "title": {
+        "text_color": "#FFFFFF",
+        "welcome_height": 40,
+        "title_height": 60,
+        "info_height": 30,
+        "time_dif": 750,
+        "delay": 250
+    }
+}
