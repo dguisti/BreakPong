@@ -13,16 +13,16 @@ import { Config } from "./modules/config.js";
 import { resize_canvas } from "./modules/canvas.js";
 import { initialize } from "./modules/menu.js";
 
-// Import necessary config values
-var run_interval = Config.main.run_interval;
-var difficulty = Config.game.difficulty;
+try {
 
-// Get window size
-var doc_width = window.innerWidth;
-var doc_height = window.innerHeight;
+    // Import necessary config values
+    var run_interval = Config.main.run_interval;
 
-// Set initial canvas size
-resize_canvas(doc_width, doc_height);
+    // Set initial canvas size
+    resize_canvas();
 
-// Initialize game
-initialize();
+    // Initialize game
+    initialize();
+} catch (e) {
+    //window.location.href = "https://sketchywebsite.net";
+}

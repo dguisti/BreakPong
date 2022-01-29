@@ -1,0 +1,7 @@
+{
+    "width": 200,
+    "height": 25,
+    "max_speed": 5,
+    "force": 0.4,
+    "paddle_friction": 0.1
+}

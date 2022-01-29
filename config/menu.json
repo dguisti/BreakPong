@@ -1,10 +1,23 @@
 {
+    "text_color": "#FFFFFF",
     "title": {
-        "text_color": "#FFFFFF",
         "welcome_height": 40,
         "title_height": 60,
         "info_height": 30,
         "time_dif": 750,
         "delay": 250
+    },
+    "difficulty": {
+        "time_dif": 200,
+        "difficulty_height": 60,
+        "selections_height": 30,
+        "info_height": 20,
+        "box_padding": 10
+    },
+    "difficulties": {
+        "1": "Easy",
+        "2": "Normal",
+        "3": "Hard",
+        "4": "Help"
     }
 }

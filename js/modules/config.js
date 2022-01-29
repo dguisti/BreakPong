@@ -20,13 +20,25 @@ Config.menu = await fetch("../../config/menu.json").then(response => {
     return jsondata;
 });
 
-Config.game.bricks = await fetch("../../config/bricks.json").then(response => {
+Config.game.brick = await fetch("../../config/brick.json").then(response => {
     return response.json();
 }).then(jsondata => {
     return jsondata;
 });
 
-Config.game.paddles = await fetch("../../config/paddles.json").then(response => {
+Config.game.paddles = await fetch("../../config/paddle.json").then(response => {
+    return response.json();
+}).then(jsondata => {
+    return jsondata;
+});
+
+Config.game.ball = await fetch("../../config/ball.json").then(response => {
+    return response.json();
+}).then(jsondata => {
+    return jsondata;
+});
+
+Config.hacker = await fetch("../../config/hacker.json").then(response => {
     return response.json();
 }).then(jsondata => {
     return jsondata;

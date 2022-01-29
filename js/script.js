@@ -12,15 +12,15 @@ run_interval = 5 //ns
 function resize_canvas() {
     doc_height = window.innerHeight;
     doc_width = window.innerWidth;
-    
-    doc_width  = window.innerWidth || document.documentElement.clientWidth || 
-    document.body.clientWidth;
-    doc_height = window.innerHeight || document.documentElement.clientHeight || 
-    document.body.clientHeight;
-    
+
+    doc_width = window.innerWidth || document.documentElement.clientWidth ||
+        document.body.clientWidth;
+    doc_height = window.innerHeight || document.documentElement.clientHeight ||
+        document.body.clientHeight;
+
     canvas.height = doc_height;
     canvas.width = doc_width;
-    
+
     ctx.canvas.height = doc_height;
     ctx.canvas.width = doc_width;
 }
@@ -70,28 +70,28 @@ function initialize() {
 
     delay = 250;
 
-    welcome_timer = setTimeout(function() {
+    welcome_timer = setTimeout(function () {
         ctx.font = `bold ${welcome_height}px Copperplate`;
         ctx.textAlign = "center";
-        ctx.strokeText("Welcome    ", doc_width/2, doc_height/2 - title_height - welcome_height*1.5);
+        ctx.strokeText("Welcome    ", doc_width / 2, doc_height / 2 - title_height - welcome_height * 1.5);
     }, time_dif * 0 + delay);
 
-    to_timer = setTimeout(function() {
+    to_timer = setTimeout(function () {
         ctx.font = `bold ${welcome_height}px Copperplate`;
         ctx.textAlign = "center";
-        ctx.strokeText("to", doc_width/2+ctx.measureText("Welcome ").width/2, doc_height/2 - title_height - welcome_height*1.5);
+        ctx.strokeText("to", doc_width / 2 + ctx.measureText("Welcome ").width / 2, doc_height / 2 - title_height - welcome_height * 1.5);
     }, time_dif * 1 + delay);
 
-    title_timer = setTimeout(function() {
+    title_timer = setTimeout(function () {
         ctx.font = `bold ${title_height}px Copperplate Gothic Light`;
         ctx.textAlign = "center";
-        ctx.strokeText("BreakPong", doc_width/2, doc_height/2 - title_height);
+        ctx.strokeText("BreakPong", doc_width / 2, doc_height / 2 - title_height);
     }, time_dif * 2 + delay);
 
-    info_timer = setTimeout(function() {
+    info_timer = setTimeout(function () {
         ctx.font = `bold ${info_height}px Copperplate Gothic Light`;
         ctx.textAlign = "center";
-        ctx.strokeText("Press Enter To Start", doc_width/2, doc_height/2 + info_height);
+        ctx.strokeText("Press Enter To Start", doc_width / 2, doc_height / 2 + info_height);
     }, time_dif * 3 + delay);
 
     timers.push(welcome_timer, to_timer, title_timer, info_timer)
@@ -116,56 +116,56 @@ function set_difficulty() {
     ctx.font = `bold ${difficulty_height}px Copperplate Gothic Light`;
     dif_size = ctx.measureText("Difficulty")
 
-    difficulty_timer = setTimeout(function() {
+    difficulty_timer = setTimeout(function () {
         ctx.font = `bold ${difficulty_height}px Copperplate Gothic Light`;
         ctx.textAlign = "center";
-        ctx.strokeText("Difficulty", doc_width/2, doc_height/4);
+        ctx.strokeText("Difficulty", doc_width / 2, doc_height / 4);
     }, time_dif * 0);
 
-    selection1_timer = setTimeout(function() {
+    selection1_timer = setTimeout(function () {
         ctx.font = `bold ${selections_height}px Copperplate`;
         ctx.textAlign = "left";
         txt = "1: Easy";
-        ctx.strokeText(txt, doc_width/2 - dif_size.width/4, doc_height/4 + difficulty_height*1);
+        ctx.strokeText(txt, doc_width / 2 - dif_size.width / 4, doc_height / 4 + difficulty_height * 1);
         ctx.lineWidth = 3;
-        ctx.strokeRect(doc_width/2 - dif_size.width/4 - box_padding, doc_height/4 + difficulty_height - selections_height, dif_size.width/2 + box_padding*2, selections_height + box_padding*2)
+        ctx.strokeRect(doc_width / 2 - dif_size.width / 4 - box_padding, doc_height / 4 + difficulty_height - selections_height, dif_size.width / 2 + box_padding * 2, selections_height + box_padding * 2)
         ctx.lineWidth = 1;
     }, time_dif * 1);
 
-    selection2_timer = setTimeout(function() {
+    selection2_timer = setTimeout(function () {
         ctx.font = `bold ${selections_height}px Copperplate`;
         ctx.textAlign = "left";
         txt = "2: Normal";
-        ctx.strokeText(txt, doc_width/2 - dif_size.width/4, doc_height/4 + difficulty_height*2);
+        ctx.strokeText(txt, doc_width / 2 - dif_size.width / 4, doc_height / 4 + difficulty_height * 2);
         ctx.lineWidth = 3;
-        ctx.strokeRect(doc_width/2 - dif_size.width/4 - box_padding, doc_height/4 + difficulty_height*2 - selections_height, dif_size.width/2 + box_padding*2, selections_height + box_padding*2)
+        ctx.strokeRect(doc_width / 2 - dif_size.width / 4 - box_padding, doc_height / 4 + difficulty_height * 2 - selections_height, dif_size.width / 2 + box_padding * 2, selections_height + box_padding * 2)
         ctx.lineWidth = 1;
     }, time_dif * 2);
 
-    selection3_timer = setTimeout(function() {
+    selection3_timer = setTimeout(function () {
         ctx.font = `bold ${selections_height}px Copperplate`;
         ctx.textAlign = "left";
         txt = "3: Hard";
-        ctx.strokeText(txt, doc_width/2 - dif_size.width/4, doc_height/4 + difficulty_height*3);
+        ctx.strokeText(txt, doc_width / 2 - dif_size.width / 4, doc_height / 4 + difficulty_height * 3);
         ctx.lineWidth = 3;
-        ctx.strokeRect(doc_width/2 - dif_size.width/4 - box_padding, doc_height/4 + difficulty_height*3 - selections_height, dif_size.width/2 + box_padding*2, selections_height + box_padding*2)
+        ctx.strokeRect(doc_width / 2 - dif_size.width / 4 - box_padding, doc_height / 4 + difficulty_height * 3 - selections_height, dif_size.width / 2 + box_padding * 2, selections_height + box_padding * 2)
         ctx.lineWidth = 1;
     }, time_dif * 3);
 
-    selection4_timer = setTimeout(function() {
+    selection4_timer = setTimeout(function () {
         ctx.font = `bold ${selections_height}px Copperplate`;
         ctx.textAlign = "left";
         txt = "4: Help";
-        ctx.strokeText(txt, doc_width/2 - dif_size.width/4, doc_height/4 + difficulty_height*4);
+        ctx.strokeText(txt, doc_width / 2 - dif_size.width / 4, doc_height / 4 + difficulty_height * 4);
         ctx.lineWidth = 3;
-        ctx.strokeRect(doc_width/2 - dif_size.width/4 - box_padding, doc_height/4 + difficulty_height*4 - selections_height, dif_size.width/2 + box_padding*2, selections_height + box_padding*2)
+        ctx.strokeRect(doc_width / 2 - dif_size.width / 4 - box_padding, doc_height / 4 + difficulty_height * 4 - selections_height, dif_size.width / 2 + box_padding * 2, selections_height + box_padding * 2)
         ctx.lineWidth = 1;
     }, time_dif * 4);
 
-    info_timer = setTimeout(function() {
+    info_timer = setTimeout(function () {
         ctx.font = `bold ${info_height}px Copperplate Gothic Light`;
         ctx.textAlign = "center";
-        ctx.strokeText("Press Key To Select", doc_width/2, doc_height/4 + difficulty_height*5);
+        ctx.strokeText("Press Key To Select", doc_width / 2, doc_height / 4 + difficulty_height * 5);
     }, time_dif * 5);
 
     timers.push(difficulty_timer, selection1_timer, selection2_timer, selection3_timer, selection4_timer, info_timer);
@@ -197,11 +197,11 @@ async function draw_timer(timer) {
 
     largest_width = ctx.measureText("GO!").width;
     ctx.lineWidth = 5;
-    ctx.strokeRect(doc_width/2 - largest_width/2 - timer_padding, doc_height/2 - timer_height/2 - timer_padding*1, largest_width + timer_padding*2, timer_height + timer_padding*2);
-    ctx.fillRect(doc_width/2 - largest_width/2 - timer_padding, doc_height/2 - timer_height/2 - timer_padding*1, largest_width + timer_padding*2, timer_height + timer_padding*2);
+    ctx.strokeRect(doc_width / 2 - largest_width / 2 - timer_padding, doc_height / 2 - timer_height / 2 - timer_padding * 1, largest_width + timer_padding * 2, timer_height + timer_padding * 2);
+    ctx.fillRect(doc_width / 2 - largest_width / 2 - timer_padding, doc_height / 2 - timer_height / 2 - timer_padding * 1, largest_width + timer_padding * 2, timer_height + timer_padding * 2);
 
     ctx.lineWidth = 1;
-    ctx.strokeText(txt, doc_width/2, doc_height/2);
+    ctx.strokeText(txt, doc_width / 2, doc_height / 2);
     ctx.restore();
 }
 
@@ -248,18 +248,18 @@ async function game_countdown() {
         text: "3",
     };
 
-    time_dif = 1000/superspeed;
+    time_dif = 1000 / superspeed;
 
     for ([text, wait_mult] of [["3", 0], ["2", 1], ["1", 2], ["GO!", 3], [null, 4]]) {
-        timers.push(setTimeout(function(text) {
+        timers.push(setTimeout(function (text) {
             timer.text = text;
         }, time_dif * wait_mult, text));
     }
-    
-    await bf.draw_init(() => {}, () => {
+
+    await bf.draw_init(() => { }, () => {
         draw_timer(timer);
     });
-    
+
     while (timer.text != null) {
         draw_timer(timer);
         await sleep(1);
@@ -278,7 +278,7 @@ function start_game() {
 }
 
 function run() {
-    setInterval(function() {
+    setInterval(function () {
 
         paddle_bottom.move(paddle_bottom_dx);
         paddle_top.move(paddle_top_dx);
@@ -309,7 +309,7 @@ function draw_background() {
 // Draw all
 function draw_all() {
     ctx.save();
-    
+
     draw_background();
     bf.draw();
     paddle_bottom.draw();
@@ -443,7 +443,7 @@ function key_press_event() {
         force = 0.4;
         // Change direction of upper paddle
         if (key_map["a"] && key_map["d"]) {
-            paddle_top_dx -= Math.sign(paddle_top_dx) * Math.min(Math.abs(paddle_friction), Math.abs(paddle_top_dx))/3;
+            paddle_top_dx -= Math.sign(paddle_top_dx) * Math.min(Math.abs(paddle_friction), Math.abs(paddle_top_dx)) / 3;
         } else if (key_map["a"]) {
             paddle_top_dx -= force;
         } else if (key_map["d"]) {
@@ -471,7 +471,7 @@ document.addEventListener("keyup", updateKeys);
 
 setInterval(key_press_event, run_interval);
 
-bf = new BrickFactory(7, 15, 0, canvas.height/3, canvas.width, canvas.height/3);
+bf = new BrickFactory(7, 15, 0, canvas.height / 3, canvas.width, canvas.height / 3);
 
 paddle_width = 200;
 paddle_height = 25;
@@ -482,12 +482,12 @@ paddle_bottom_dx = 0;
 paddle_top_dx = 0;
 paddle_friction = 0.1;
 
-paddle_bottom = new BrickStruct("yellow", doc_width/2 - paddle_width/2, doc_height - paddle_height*1.5, paddle_width, paddle_height, false);
-paddle_top = new BrickStruct("green", doc_width/2 - paddle_width/2, paddle_height*.5, paddle_width, paddle_height, false);
+paddle_bottom = new BrickStruct("yellow", doc_width / 2 - paddle_width / 2, doc_height - paddle_height * 1.5, paddle_width, paddle_height, false);
+paddle_top = new BrickStruct("green", doc_width / 2 - paddle_width / 2, paddle_height * .5, paddle_width, paddle_height, false);
 
 ball_radius = 15;
-ball_bottom = new Ball(doc_width/4, 5*doc_height/6, ball_radius, "blue", 0, -1, 1);
-ball_top = new Ball(doc_width/4, 1*doc_height/6, ball_radius, "white", 0, 1, 1);
+ball_bottom = new Ball(doc_width / 4, 5 * doc_height / 6, ball_radius, "blue", 0, -1, 1);
+ball_top = new Ball(doc_width / 4, 1 * doc_height / 6, ball_radius, "white", 0, 1, 1);
 
 initialize();
 

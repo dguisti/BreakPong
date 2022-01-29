@@ -1,8 +1,33 @@
 {
     "difficulty": 2,
-    "difficulties": {
-        "1": "Easy",
-        "2": "Normal",
-        "3": "Hard"
-    }
+    "countdown": {
+        "timer_height": 60,
+        "time_dif": 1000,
+        "timer_padding": 10,
+        "color": "#FFFFFF",
+        "values": [
+            [
+                "3",
+                0
+            ],
+            [
+                "2",
+                1
+            ],
+            [
+                "1",
+                2
+            ],
+            [
+                "GO!",
+                3
+            ],
+            [
+                null,
+                4
+            ]
+        ]
+    },
+    "brick_draw_time": 2000,
+    "ball_draw_time": 1000
 }
