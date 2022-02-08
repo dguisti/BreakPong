@@ -1,4 +1,4 @@
-import { sleep, clamp, distance } from "./util.js";
+import { sleep } from "./util.js";
 import { Config } from "./config.js";
 
 
