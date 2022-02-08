@@ -13,7 +13,17 @@ import { Config } from "./config.js";
 import { doc_width, doc_height } from "./window.js";
 
 // Setup canvas + context
-export var canvas = document.getElementById("main-canv");
+let possible_canvas = document.getElementById("main-canv");
+if (canvas == null) {
+    possible_canvas = document.createElement("canvas");
+    possible_canvas.width = 1920;
+    possible_canvas.height = 1080;
+    possible_canvas.style.background = Config.main.background_color;
+    possible_canvas.id = "main-canv";
+}
+
+export var canvas = possible_canvas
+
 export var ctx = canvas.getContext("2d");
 
 export function resize_canvas() {

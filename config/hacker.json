@@ -1,5 +1,5 @@
 {
-    "skip_title": true,
-    "skip_difficulty": true,
+    "skip_title": false,
+    "skip_difficulty": false,
     "skip_countdown": false
 }

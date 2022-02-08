@@ -5,7 +5,7 @@
         "title_height": 60,
         "info_height": 30,
         "time_dif": 750,
-        "delay": 250
+        "delay": 0
     },
     "difficulty": {
         "time_dif": 200,

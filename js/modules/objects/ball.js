@@ -2,8 +2,13 @@ import { sleep, clamp, distance } from "./util.js";
 import { ctx } from "./canvas.js";
 import { doc_width, doc_height } from "./window.js";
 import { Config } from "./config.js";
+import { Timer } from "./timer.js";
+import { EventDispatch } from "./dispatch.js";
+
+let MAX_BALL_D = distance(0, 0, Config.game.ball.dx[0], Config.game.ball.dy[0])
 
 class Ball {
+    static next_id = 0;
     constructor(
         x,
         y,
@@ -14,7 +19,6 @@ class Ball {
         dy = 0,
         speed = 1
     ) {
-        super();
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -23,29 +27,82 @@ class Ball {
         this.dx = dx;
         this.dy = dy;
         this.speed = speed;
+        this.collided_ball = false;
+        this.destroyed = false;
+        this.id = Ball.next_id;
+        this.accel_factor = 1; //0.9; CONSIDER
+        this.hit_change = 1; //1.2; CONSIDER
+        Ball.next_id += 1;
     }
 
     move() {
-        this.x += this.dx * this.speed;
-        this.y += this.dy * this.speed;
+        if (!this.destroyed) {
+            this.collided_ball = false;
+            this.x += this.dx * this.speed;
+            this.y += this.dy * this.speed;
+            // CONSIDER
+            if (this.accel_factor != 1) {
+                if (distance(0, 0, this.dx, this.dy) > MAX_BALL_D) {
+                    console.log(distance(0, 0, this.dx, this.dy));
+                    this.dx *= this.accel_factor;
+                    this.dy *= this.accel_factor;
+                }
+            }
+        }
     }
 
-    destroy() {
-        let death = new Event("death", { last_hit: this.last_hit });
-        this.dispatchEvent(death);
+    destroy(wall) {
+        console.log("Ball of color", this.color, "destroyed.")
+        // Begin death
+        this.destroyed = true;
+        let current_color = this.color;
+        // clear after some time
+        for (let i = 0; i < Config.game.ball.death_flashes; i += 2) {
+            Timer.add_timer(() => {
+                this.color = Config.game.ball.death_color;
+            }, i*Config.game.ball.death_color_time);
+            Timer.add_timer(() => {
+                this.color = "transparent";
+            }, (i+1)*Config.game.ball.death_color_time);
+        }
+
+        Timer.add_timer(() => {
+            if (wall == "top") {
+                // Hit top wall, respawn at top
+                this.x = doc_width / 2;
+                this.y = doc_height / 6;
+                this.dx = Config.game.ball.dx[1]
+                this.dy = Config.game.ball.dy[1]
+                console.log(`Set to x=${this.x}, y=${this.y}, dx=${this.dx}, dy=${this.dy}`)
+                
+            } else {
+                // Hit the bottom wall, respawn at bottom
+                this.x = doc_width / 2;
+                this.y = (5 * doc_height) / 6;
+                this.dx = Config.game.ball.dx[0]
+                this.dy = Config.game.ball.dy[0]
+                console.log(`Set to x=${this.x}, y=${this.y}, dx=${this.dx}, dy=${this.dy}`)
+            }
+            this.destroyed = false;
+            this.color = current_color;
+
+        }, Config.game.ball.death_wait_time - Config.game.ball.death_flashes * Config.game.ball.death_color_time);
+
+        let death = new EventDispatch("hit_wall", { wall_hit: wall, ball_id: this.id, color: this.color })
     }
 
     hit_brick() {
-        let hit = new Event("hit_brick", { last_hit: this.last_hit });
-        this.dispatchEvent(hit);
+        let hit = new EventDispatch("hit_brick", { last_hit: this.last_hit });
     }
 
     // works but incomplete
     check_collisions(bricks, paddles, balls) {
-        this.colliding_walls();
-        //this.colliding_balls(balls);
-        this.colliding_bricks(bricks);
-        //this.colliding_paddles(paddles);
+        if (!this.destroyed) {
+            this.colliding_walls();
+            this.colliding_balls(balls);
+            this.colliding_bricks(bricks);
+            //this.colliding_paddles(paddles);
+        }
     }
 
     // works??? maybe???
@@ -57,23 +114,27 @@ class Ball {
             this.dx = -this.dx;
         }
         if (this.y + this.radius >= doc_height) {
-            this.destroy();
+            //this.dy = -this.dy; // TEMPORARY WHILE BALLS ARE BROKEN
+            this.destroy("bottom");
         }
         if (this.y - this.radius <= 0) {
-            this.destroy();
+            //this.dy = -this.dy; // TEMPORARY WHILE BALLS ARE BROKEN
+            this.destroy("top");
         }
     }
 
     // works??? maybe???
     colliding_bricks(bricks) {
         for (let brick of bricks) {
+            if (brick.broken) {
+                continue;
+            }
             let collision_data = this.colliding_rect(
                 brick.x,
                 brick.y,
                 brick.width,
                 brick.height
             );
-            console.log(this.color, collision_data)
             if (collision_data.collided) {
                 if (collision_data.top || collision_data.bottom) {
                     this.dy *= -1;
@@ -82,6 +143,8 @@ class Ball {
                     this.dx *= -1;
                 }
 
+                this.add_noise();
+                
                 brick.destroy();
                 this.hit_brick();
             }
@@ -106,29 +169,43 @@ class Ball {
                 }
 
                 this.last_hit = paddle.name;
+
+                this.add_noise();
+                
             }
         }
     }
 
     colliding_balls(balls) {
+        let r1 = this.radius
         for (let ball of balls) {
+            if (ball.destroyed) {
+                continue;
+            }
+            let r2 = ball.radius
             let dist = distance(this.x, this.y, ball.x, ball.y);
-            if (dist < this.radius + ball.radius) {
-                this.dx *= -1;
-                this.dy *= -1;
+            if ((dist < r1 + r2) && !ball.collided_ball) {
+                this.collided_ball = true;
+                ball.collided_ball = true;
+                console.log(MAX_BALL_D)
+                console.log("Start dist: ", distance(0, 0, this.dx, this.dy))
+                this.dx = MAX_BALL_D*(this.x - ball.x)/dist // * this.hit_change CONSIDER   //* Math.abs(this.dx);
+                this.dy = MAX_BALL_D*(this.y - ball.y)/dist // * this.hit_change CONSIDER   //* Math.abs(this.dy);
+                console.log("Ending dist: ", distance(0, 0, this.dx, this.dy))
+                ball.dx = MAX_BALL_D*(ball.x - this.x)/dist // * this.hit_change CONSIDER   //* Math.abs(ball.dx);
+                ball.dy = MAX_BALL_D*(ball.y - this.y)/dist // * this.hit_change CONSIDER   //* Math.abs(ball.dy);
+                
+                this.add_noise();
             }
         }
     }
 
-    colliding_line(x1, y1, x2, y2) {
+    colliding_line(x1, y1, x2, y2, side="") {
         let p1 = { x: x1, y: y1 };
 
         let p2 = { x: x2, y: y2 };
 
-        var cx = this.x;
-        var cy = this.y;
-
-        let c = { x: cx, y: cy };
+        let c = { x: this.x, y: this.y };
 
         let possible_x = c.x;
         let possible_y = c.y;
@@ -158,14 +235,25 @@ class Ball {
 
         let dist = distance(closest_x, closest_y, c.x, c.y);
 
+        if (side == "top") {
+            if (c.y > closest_y) return false
+        } else if (side == "bottom") {
+            if (c.y < closest_y) return false
+        } else if (side == "left") {
+            if (c.x > closest_x || this.dx < 0) return false
+        } else if (side == "right") {
+            if (c.x < closest_x || this.dx > 0) return false
+        }
+        
         return dist <= this.radius;
     }
 
     colliding_rect(x, y, width, height) {
-        var top = this.colliding_line(x, y, x + width, y + width);
-        var left = this.colliding_line(x, y, x + width, y + height);
-        var bottom = this.colliding_line(x, y, x + width, y + height);
-        var right = this.colliding_line(x, y, x + width, y + height);
+        var top = this.colliding_line(x, y, x + width, y, "top");
+        var left = this.colliding_line(x, y, x, y + height, "left");
+        var bottom = this.colliding_line(x, y + height, x + width, y + height, "bottom");
+        var right = this.colliding_line(x + width, y, x + width, y + height, "right");
+
 
         return {
             top: top,
@@ -174,6 +262,25 @@ class Ball {
             right: right,
             collided: top || left || bottom || right,
         };
+    }
+
+    add_noise() {
+        // Randomize motion
+        let theta = Math.atan(this.dy/this.dx);
+        theta = (this.dx >= 0) ? theta : theta + Math.PI;
+
+        let magnitude = distance(0, 0, this.dx, this.dy);
+
+        let delta_theta = Config.game.ball.random_rotation * (Math.random() * 2 - 1);
+
+        let theta_new = theta + delta_theta;
+
+        // console.log(`Old dx: ${this.dx} Old dy: ${this.dy}`);
+        
+        this.dx = magnitude * Math.cos(theta_new);
+        this.dy = magnitude * Math.sin(theta_new);
+
+        // console.log(`New dx: ${this.dx} New dy: ${this.dy}`);
     }
 
     draw() {
@@ -187,101 +294,8 @@ class Ball {
     }
 }
 
-class Brick {
-    constructor(color, x, y, width, height, breakable = true) {
-        this.color = color;
-        this.breakable = breakable;
-        this.broken = false;
 
-        this.width = width;
-        this.height = height;
 
-        this.x = x;
-        this.y = y;
-
-        //this.hitbox = new HitboxRect(x, y, x + width, y + height);
-    }
-
-    draw() {
-        if (!this.broken) {
-            ctx.save();
-            ctx.fillStyle = this.color;
-            ctx.fillRect(this.x, this.y, this.width, this.height);
-            ctx.restore();
-        }
-    }
-
-    destroy() {
-        if (this.breakable) {
-            this.broken = true;
-        }
-    }
-}
-
-export class BrickFactory {
-    constructor(
-        rows,
-        columns,
-        x,
-        y,
-        width,
-        height,
-        colors = ["red"],
-        spacing = 5,
-        brick = Brick
-    ) {
-        this.rows = rows;
-        this.columns = columns;
-        this.bricks = [];
-        this.all_bricks = [];
-
-        var current_x = x;
-        var current_y = y;
-
-        var brick_width = (width - spacing * (columns - 1)) / columns;
-        var brick_height = (height - spacing * (rows - 1)) / rows;
-
-        for (var i = 0; i < rows; i++) {
-            this.bricks.push([]);
-            let row = this.bricks[this.bricks.length - 1];
-            let color_row = i % colors.length;
-            current_x = x;
-            for (var j = 0; j < columns; j++) {
-                var current_brick = new brick(
-                    colors[color_row],
-                    current_x,
-                    current_y,
-                    brick_width,
-                    brick_height
-                );
-                row.push(current_brick);
-                this.all_bricks.push(current_brick);
-                current_x += brick_width + spacing;
-            }
-            current_y += brick_height + spacing;
-        }
-    }
-
-    async draw_init(before = () => { }, after = () => { }, draw_time = 2000) {
-        for (var row of this.bricks) {
-            for (var brick of row) {
-                before();
-                brick.draw();
-                after();
-                await sleep(draw_time / (this.rows * this.columns));
-                //console.log(`Sleeping for ${this.draw_time * 1000 / (this.rows * this.columns)}ms`);
-            }
-        }
-    }
-
-    draw() {
-        for (var row of this.bricks) {
-            for (var brick of row) {
-                brick.draw();
-            }
-        }
-    }
-}
 
 export class BallFactory {
     // BallFactory class that keeps track of and creates balls
@@ -365,18 +379,15 @@ export class BallFactory {
 
     check_collisions(bricks, paddles) {
         for (let i = 0; i < this.balls.length; i++) {
-            let other_balls = this.balls.slice().splice(i, 1);
+            let other_balls = this.balls.slice()
+            other_balls.splice(i, 1);
             this.balls[i].check_collisions(bricks, paddles, other_balls);
         }
     }
 }
 
-export class PaddleFactory {
-    paddles = [];
-    async draw_init() {
-        await sleep(1);
-    }
-}
+
+
 
 // ball1.addEventListener("death", (last_hit) => { });
 

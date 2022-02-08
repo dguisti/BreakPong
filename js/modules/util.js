@@ -7,6 +7,13 @@ Dallin Guisti & Wil Kirkland
 Last updated 1/28/2022
 */
 
+
+
+/* Table of Contents - TODO
+
+
+*/
+
 export function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -36,4 +43,30 @@ export function random_string(length) {
         str += chars[Math.floor(Math.random() * chars.length)];
     }
     return str;
+}
+
+export class EventDispatch {
+    static events = {};
+
+    constructor(...data) {
+        if (data.length == 1 || data.length == 2) {
+            this.dispatch_event(...data);
+        }
+    }
+
+    static add_listeners(event_name, ...listeners) {
+        if (event_name in EventDispatch.events) {
+            EventDispatch.events[event_name].push(...listeners);
+        } else {
+            EventDispatch.events[event_name] = listeners;
+        }
+    }
+
+    static dispatch_event(event_name, data = {}) {
+        if (event_name in EventDispatch.events) {
+            for (let listener of EventDispatch.events[event_name]) {
+                listener(data);
+            }
+        }
+    }
 }

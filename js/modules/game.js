@@ -9,25 +9,33 @@ Last updated 1/28/2022
 
 // Necessary modules
 import { canvas, fill_canvas, ctx } from "./canvas.js";
-import { BrickFactory, PaddleFactory, BallFactory } from "./objects.js";
+import { BallFactory } from "./objects/ball.js";
+import { BrickFactory } from "./objects/brick.js";
+import { PaddleFactory } from "./objects/paddle.js";
 import { Config } from "./config.js";
 import { Timer } from "./timer.js";
 import { doc_width, doc_height } from "./window.js";
-import { sleep } from "./util.js";
+import { sleep, EventDispatch } from "./util.js";
 
 var bf;
 var pf;
 var blf;
+var scores;
+var dispatcher;
+var run_interval;
 
 export function prep_game() {
     bf = new BrickFactory(Config.game.brick.rows, Config.game.brick.columns, 0, canvas.height / 3, canvas.width, canvas.height / 3, Config.game.brick.colors);
     pf = new PaddleFactory(Config.game.brick.rows, Config.game.brick.columns, 0, canvas.height / 3, canvas.width, canvas.height / 3, Config.game.brick.colors);
     blf = new BallFactory();
-    fill_canvas("clear");
+    EventDispatch.add_listeners("hit_brick", add_score);
+    EventDispatch.add_listeners("hit_wall", reduct_score);
+    scores = {"top": 1, "bottom": 1}
     if (Config.hacker.skip_countdown) {
         start_game();
         return;
     }
+    fill_canvas("clear")
     game_countdown();
 }
 
@@ -114,7 +122,7 @@ function start_game() {
 }
 
 function run() {
-    setInterval(function () {
+    run_interval = setInterval(function () {
 
         /*
         paddle_bottom.move(paddle_bottom_dx);
@@ -124,10 +132,31 @@ function run() {
         paddle_bottom_dx -= Math.sign(paddle_bottom_dx) * Math.min(Math.abs(paddle_friction), Math.abs(paddle_bottom_dx));
         */
 
-        blf.check_collisions(bf.bricks, pf.paddles)
+        blf.check_collisions(bf.all_bricks, pf.paddles) //Ball Factory gives balls
         blf.move();
 
 
         draw_all();
     }, 10);
+}
+
+function add_score(hit_data) {
+    let side = hit_data.last_hit;
+    scores[side] += 1;
+}
+
+function reduct_score(hit_data) {
+    let side = hit_data.wall_hit;
+    console.log(side, hit_data)
+    scores[side] -= 1;
+    if (scores[side] < 1) {
+        end_game(side);
+    }
+}
+
+function end_game(losing_side) {
+    return; //TEMP
+    clearInterval(run_interval);
+    alert(`Side ${losing_side} has lost! Points - Top: ${scores.top}, Bottom: ${scores.bottom}`);
+    console.log(`Side ${losing_side} has lost! Points - Top: ${scores.top}, Bottom: ${scores.bottom}`);
 }
