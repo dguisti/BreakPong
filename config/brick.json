@@ -9,5 +9,6 @@
         "#ed0745"
     ],
     "rows": 7,
-    "columns": 15
+    "columns": 15,
+    "spacing": -0.5
 }

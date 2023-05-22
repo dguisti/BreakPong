@@ -14,6 +14,7 @@ Last updated 1/28/2022
 
 */
 
+
 export function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -24,6 +25,13 @@ export function distance(x1, y1, x2, y2) {
 
 export function clamp(val, min, max) {
     return Math.min(Math.max(val, min), max);
+}
+
+export function randint(min, max) {
+    /*
+    Give a random number between min and max (inclusive)
+    */
+    return Math.floor(Math.random() * (max - min +1)) + min
 }
 
 export function random_string(length) {
@@ -50,7 +58,7 @@ export class EventDispatch {
 
     constructor(...data) {
         if (data.length == 1 || data.length == 2) {
-            this.dispatch_event(...data);
+            EventDispatch.dispatch_event(...data);
         }
     }
 

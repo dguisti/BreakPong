@@ -16,8 +16,8 @@ import { doc_width, doc_height } from "./window.js";
 let possible_canvas = document.getElementById("main-canv");
 if (canvas == null) {
     possible_canvas = document.createElement("canvas");
-    possible_canvas.width = 1920;
-    possible_canvas.height = 1080;
+    possible_canvas.width = doc_width;
+    possible_canvas.height = doc_height;
     possible_canvas.style.background = Config.main.background_color;
     possible_canvas.id = "main-canv";
 }

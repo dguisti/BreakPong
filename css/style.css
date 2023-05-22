@@ -3,7 +3,7 @@
 }
 
 :root {
-    --fade-time:1s;
+    --fade-time:0.5s;
 }
 
 html, body {

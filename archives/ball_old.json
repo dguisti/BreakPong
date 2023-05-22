@@ -1,0 +1,32 @@
+{
+    "order": [
+        "bottom",
+        "top"
+    ],
+    "radius": [
+        15,
+        15
+    ],
+    "colors": [
+        "#BADEFC",
+        "#BADEFC"
+    ],
+    "dx": [
+        -0.5,
+        1
+    ],
+    "dy": [
+        -1,
+        0.5
+    ],
+    "speed": [
+        3,
+        3
+    ],
+    "padding": 0.166666666,
+    "random_rotation": 0.1,
+    "death_color": "#BADEFC",
+    "death_color_time": 100,
+    "death_flashes": 4,
+    "death_wait_time": 2000
+}

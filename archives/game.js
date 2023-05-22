@@ -1,4 +1,4 @@
-superspeed = 10
+import { get_keys } from "../keyboard.js"
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

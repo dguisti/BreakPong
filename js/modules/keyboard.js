@@ -10,6 +10,8 @@ Last updated 1/28/2022
 var key_map = {
     "a": false,
     "d": false,
+    "A": false,
+    "D": false,
     "ArrowLeft": false,
     "ArrowRight": false,
     "Enter": false,
@@ -47,7 +49,7 @@ export function run_on_press(func, ...keys_wanted) {
 document.addEventListener("keydown", update_keys);
 document.addEventListener("keyup", update_keys);
 
-function key_press_event() {
+function UNUSEDkey_press_event() {
     // Title of game
     if (key_listener == "start") {
 

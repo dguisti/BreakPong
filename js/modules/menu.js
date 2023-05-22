@@ -139,7 +139,8 @@ function selected_difficulty(num) {
         run_on_press(selected_difficulty, "1", "2", "3", "4");
     } else {
         // Set global difficulty
-        Data.difficulty = parseInt(num);
+        //Data.difficulty = parseInt(num);
+        Config.game.difficulty = parseInt(num);
         // Clear all timers
         Timer.clear_timers();
         prep_game();

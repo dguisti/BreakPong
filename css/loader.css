@@ -10,29 +10,6 @@ body {
   background: repeating-linear-Gradient(45deg, #000000 0 2px, #141414 0 7px);
 }
 
-@keyframes background-fade {
-    from { background: repeating-linear-Gradient(45deg, #000000 0 2px, #141414 0 7px); }
-    to   { background: "#141414"; }
-}
-
-/* Firefox < 16 */
-@-moz-keyframes background-fade {
-    from { background: repeating-linear-Gradient(45deg, #000000 0 2px, #141414 0 7px); }
-    to   { background: "#141414"; }
-}
-
-/* Safari, Chrome and Opera > 12.1 */
-@-webkit-keyframes background-fade {
-    from { background: repeating-linear-Gradient(45deg, #000000 0 2px, #141414 0 7px); }
-    to   { background: "#141414"; }
-}
-
-/* Internet Explorer */
-@-ms-keyframes background-fade {
-    from { background: repeating-linear-Gradient(45deg, #000000 0 2px, #141414 0 7px); }
-    to   { background: "#141414"; }
-}
-
 .load {
   position: relative;
   width: 5em;

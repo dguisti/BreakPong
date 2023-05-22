@@ -1,5 +1,7 @@
 {
     "difficulty": 2,
+    "difficulty_text_color": "#FFFFFF",
+    "difficulty_text_size": 40,
     "countdown": {
         "timer_height": 60,
         "time_dif": 1000,
@@ -29,5 +31,8 @@
         ]
     },
     "brick_draw_time": 2000,
-    "ball_draw_time": 1000
+    "ball_draw_time": 1000,
+    "start_score": 5,
+    "brick_score": 5,
+    "death_score": 5
 }

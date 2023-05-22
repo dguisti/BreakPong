@@ -26,13 +26,19 @@ Config.game.brick = await fetch("../../config/brick.json").then(response => {
     return jsondata;
 });
 
-Config.game.paddles = await fetch("../../config/paddle.json").then(response => {
+Config.game.paddle = await fetch("../../config/paddle.json").then(response => {
     return response.json();
 }).then(jsondata => {
     return jsondata;
 });
 
 Config.game.ball = await fetch("../../config/ball.json").then(response => {
+    return response.json();
+}).then(jsondata => {
+    return jsondata;
+});
+
+Config.game.score = await fetch("../../config/score.json").then(response => {
     return response.json();
 }).then(jsondata => {
     return jsondata;

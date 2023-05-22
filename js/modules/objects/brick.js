@@ -1,12 +1,12 @@
-import { sleep } from "./util.js";
-import { Config } from "./config.js";
+import { sleep } from "../util.js";
+import { Config } from "../config.js";
+import { ctx } from "../canvas.js";
 
 
 
 class Brick {
-    constructor(color, x, y, width, height, breakable = true) {
+    constructor(color, x, y, width, height) {
         this.color = color;
-        this.breakable = breakable;
         this.broken = false;
 
         this.width = width;
@@ -14,8 +14,6 @@ class Brick {
 
         this.x = x;
         this.y = y;
-
-        //this.hitbox = new HitboxRect(x, y, x + width, y + height);
     }
 
     draw() {
@@ -28,9 +26,7 @@ class Brick {
     }
 
     destroy() {
-        if (this.breakable) {
-            this.broken = true;
-        }
+        this.broken = true;
     }
 }
 
@@ -46,8 +42,8 @@ export class BrickFactory {
         width,
         height,
         colors = ["red"],
-        spacing = 5,
-        brick = Brick
+        spacing = Config.game.brick.spacing,
+        brick_class = Brick
     ) {
         this.rows = rows;
         this.columns = columns;
@@ -66,7 +62,7 @@ export class BrickFactory {
             let color_row = i % colors.length;
             current_x = x;
             for (var j = 0; j < columns; j++) {
-                var current_brick = new brick(
+                var current_brick = new brick_class(
                     colors[color_row], // `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`
                     current_x,
                     current_y,

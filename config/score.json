@@ -1,0 +1,11 @@
+{
+    "font": "Copperplate Gothic Light",
+    "max_font_size": 20,
+    "wall_spacing": 50,
+    "inner_color": "#141414",
+    "no_points_color": "#2a324b",
+    "text_color": "#FFFFFF",
+    "flash_number": 1,
+    "rad_inner": 15,
+    "rad_outer": 30
+}

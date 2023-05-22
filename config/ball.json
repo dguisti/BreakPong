@@ -1,31 +1,41 @@
 {
-    "order": [
-        "bottom",
-        "top"
-    ],
-    "radius": [
-        15,
-        15
-    ],
-    "colors": [
-        "#BADEFC",
-        "#BADEFC"
-    ],
-    "dx": [
-        -0.5,
-        1
-    ],
-    "dy": [
-        -1,
-        0.5
-    ],
-    "speed": [
-        3,
-        3
-    ],
-    "random_rotation": 6,
-    "death_color": "#BADEFC",
-    "death_color_time": 100,
-    "death_flashes": 4,
-    "death_wait_time": 2000
+    "generic": {
+        "random_rotation": 0.1,
+        "death_color": "#BADEFC",
+        "death_color_time": 200,
+        "death_flashes": 5,
+        "death_wait_time": 2000,
+        "base_speed": 1,
+        "speed_mult": 1,
+        "max_speed": 15
+    },
+    "balls": [
+        {
+            "color": "#71D1D6",
+            "radius": 15,
+            "position": {
+                "x": "center",
+                "y": "bottom",
+                "side": "bottom"
+            },
+            "velocity": {
+                "vx": 0,
+                "vy": -5
+            }
+        },
+        {
+            "color": "#5A64B0",
+            "radius": 15,
+            "position": {
+                "x": "center",
+                "y": "top",
+                "side": "top"
+            },
+            "velocity": {
+                "vx": 0,
+                "vy": 5
+            }
+        }
+    ]
 }
+
